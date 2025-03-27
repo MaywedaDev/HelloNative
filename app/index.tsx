@@ -8,15 +8,49 @@ import {
 	Text,
 	View,
 	useWindowDimensions,
+	FlatList,
+	SectionList,
+	TextInput,
+	Image,
+	KeyboardAvoidingView,
+	Button,
+	Pressable,
 } from "react-native";
+import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import pokemonList from "../data/data.json";
+import groupedPokemon from "../data/grouped-data.json";
 
 export default function Index() {
 	const { width } = useWindowDimensions();
 
+	const [name, setName] = useState("");
+	const [errors, setErrors] = useState({});
+	const [userName, setUserName] = useState("");
+	const [password, setPassword] = useState("");
+
+	const validateForm = () => {
+		let errors: { userName: string; password: string } = {
+			userName: "",
+			password: "",
+		};
+
+		if (!userName) errors.userName = "Name is required";
+		if (!password) errors.password = "Password is required";
+
+		setErrors(errors);
+
+		return !errors.password && !errors.userName;
+	};
+
+	const formImage = require("../assets/images/adaptive-icon.png");
+
 	const styles = StyleSheet.create({
 		safeArea: {
 			flex: 1,
+			display: "flex",
+			justifyContent: "center",
+			// alignItems: "center",
 		},
 		screen: {
 			width: "100%",
@@ -38,6 +72,57 @@ export default function Index() {
 		androidShadow: {
 			elevation: 30,
 			shadowColor: "#0000ff",
+		},
+		card: {
+			width: "100%",
+			padding: 15,
+			borderRadius: 8,
+			borderWidth: 3,
+			borderColor: "#000",
+			color: "#f5f5f5",
+			marginVertical: 10,
+		},
+		cardText: {
+			fontSize: 20,
+		},
+		input: {
+			height: 48,
+			borderColor: "rgba(0, 0, 0, 0.4)",
+			borderWidth: 1,
+			padding: 8,
+			marginTop: 12,
+			borderRadius: 10,
+			// marginHorizontal: 15,
+		},
+		nameText: {
+			fontSize: 30,
+			fontWeight: 600,
+		},
+		multiLineText: {
+			minHeight: 100,
+			fontSize: 22,
+		},
+		form: {
+			marginHorizontal: 20,
+			padding: 20,
+			borderRadius: 15,
+			elevation: 10,
+			backgroundColor: "#f5f5f5",
+		},
+		label: {
+			fontSize: 18,
+			fontWeight: 600,
+			marginTop: 12,
+		},
+		btn: {
+			backgroundColor: "#0000ff",
+			width: "100%",
+			height: 48,
+			borderRadius: 12,
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			marginVertical: 20,
 		},
 	});
 
@@ -91,7 +176,9 @@ export default function Index() {
 	];
 
 	return (
-		<View
+		<KeyboardAvoidingView
+			behavior="padding"
+			keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 10}
 			style={{
 				flex: 1,
 				height: "100%",
@@ -102,12 +189,23 @@ export default function Index() {
 		>
 			<StatusBar backgroundColor="#0000ff" />
 			<SafeAreaView style={styles.safeArea}>
-				<ScrollView style={styles.screen}>
-					{pokemonData.map((pokemon, i) => (
-						<PokemonCard key={i} {...pokemon} />
-					))}
-				</ScrollView>
+				<View style={styles.form}>
+					<Image
+						style={{ width: "100%", height: 300 }}
+						resizeMode="cover"
+						source={formImage}
+					/>
+					<Text style={styles.label}>Username</Text>
+					<TextInput style={styles.input} />
+					{errors.userName && <Text>{errors.userName}</Text>}
+					<Text style={styles.label}>Password</Text>
+					<TextInput style={styles.input} />
+					{errors.password && <Text>{errors.password}</Text>}
+					<Pressable onPress={validateForm} style={styles.btn}>
+						<Text style={[styles.cardText, { color: "#ffff" }]}>Log in</Text>
+					</Pressable>
+				</View>
 			</SafeAreaView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
