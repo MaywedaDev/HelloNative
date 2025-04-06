@@ -1,25 +1,18 @@
-import Box from "@/components/Box";
-import PokemonCard from "@/components/PokemonCard";
 import { StatusBar } from "expo-status-bar";
 import {
 	Platform,
-	ScrollView,
 	StyleSheet,
 	Text,
 	View,
 	useWindowDimensions,
-	FlatList,
-	SectionList,
 	TextInput,
 	Image,
 	KeyboardAvoidingView,
-	Button,
 	Pressable,
 } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import pokemonList from "../data/data.json";
-import groupedPokemon from "../data/grouped-data.json";
+import Posts from "@/components/Posts";
 
 export default function Index() {
 	const { width } = useWindowDimensions();
@@ -189,22 +182,7 @@ export default function Index() {
 		>
 			<StatusBar backgroundColor="#0000ff" />
 			<SafeAreaView style={styles.safeArea}>
-				<View style={styles.form}>
-					<Image
-						style={{ width: "100%", height: 300 }}
-						resizeMode="cover"
-						source={formImage}
-					/>
-					<Text style={styles.label}>Username</Text>
-					<TextInput style={styles.input} />
-					{errors.userName && <Text>{errors.userName}</Text>}
-					<Text style={styles.label}>Password</Text>
-					<TextInput style={styles.input} />
-					{errors.password && <Text>{errors.password}</Text>}
-					<Pressable onPress={validateForm} style={styles.btn}>
-						<Text style={[styles.cardText, { color: "#ffff" }]}>Log in</Text>
-					</Pressable>
-				</View>
+				<Posts />
 			</SafeAreaView>
 		</KeyboardAvoidingView>
 	);
