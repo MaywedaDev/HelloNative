@@ -13,30 +13,15 @@ import {
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Posts from "@/components/Posts";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AboutScreen from "@/components/screens/AboutScreen";
+import HomeScreen from "@/components/screens/HomeScreen";
 
 export default function Index() {
 	const { width } = useWindowDimensions();
 
-	const [name, setName] = useState("");
-	const [errors, setErrors] = useState({});
-	const [userName, setUserName] = useState("");
-	const [password, setPassword] = useState("");
-
-	const validateForm = () => {
-		let errors: { userName: string; password: string } = {
-			userName: "",
-			password: "",
-		};
-
-		if (!userName) errors.userName = "Name is required";
-		if (!password) errors.password = "Password is required";
-
-		setErrors(errors);
-
-		return !errors.password && !errors.userName;
-	};
-
-	const formImage = require("../assets/images/adaptive-icon.png");
+	const Stack = createNativeStackNavigator();
 
 	const styles = StyleSheet.create({
 		safeArea: {
@@ -119,71 +104,10 @@ export default function Index() {
 		},
 	});
 
-	const pokemonData = [
-		{
-			name: "Pikachu",
-			image: require("../assets/images/pikachu.png"),
-			moves: [
-				"Thunder Shock",
-				"Quick Attack",
-				"Iron Tail",
-				"Electro Ball",
-				"Thunderbolt",
-			],
-			weaknesses: ["Ground", "Rock", "Ice"],
-			hp: 34,
-			type: "electric",
-		},
-		{
-			name: "Bulbasaur",
-			image: require("../assets/images/bulbasaur.png"),
-			moves: ["Vine Whip", "Razor Leaf", "Seed Bomb", "Tackle"],
-			weaknesses: ["Fire", "Flying", "Psychic", "Ice"],
-			hp: 45,
-			type: "grass",
-		},
-		{
-			name: "Charmander",
-			image: require("../assets/images/charmander.png"),
-			moves: ["Ember", "Scratch", "Dragon Breath", "Fire Fang"],
-			weaknesses: ["Water", "Ground", "Rock"],
-			hp: 39,
-			type: "fire",
-		},
-		{
-			name: "Squirtle",
-			image: require("../assets/images/squirtle.png"),
-			moves: ["Water Gun", "Bubble", "Bite", "Aqua Tail"],
-			weaknesses: ["Electric", "Grass"],
-			hp: 44,
-			type: "water",
-		},
-		// {
-		// 	name: "Eevee",
-		// 	image: require("../assets/images/pictures/eevee.png"),
-		// 	moves: ["Tackle", "Quick Attack", "Bite", "Shadow Ball"],
-		// 	weaknesses: ["Fighting"],
-		// 	hp: 55,
-		// 	type: "normal",
-		// },
-	];
-
 	return (
-		<KeyboardAvoidingView
-			behavior="padding"
-			keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 10}
-			style={{
-				flex: 1,
-				height: "100%",
-				display: "flex",
-				flexDirection: "column",
-				backgroundColor: "#f6f6f6",
-			}}
-		>
-			<StatusBar backgroundColor="#0000ff" />
-			<SafeAreaView style={styles.safeArea}>
-				<Posts />
-			</SafeAreaView>
-		</KeyboardAvoidingView>
+		<NavigationContainer>
+			<Stack.Screen name="Home" component={HomeScreen} />
+			<Stack.Screen name="About" component={AboutScreen} />
+		</NavigationContainer>
 	);
 }
